@@ -1,0 +1,87 @@
+body {
+    background-color: #e76f51;
+    margin: 0;
+}
+
+.form {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input_block {
+    background-color: #0b132b;
+    padding: 30px 30px 25px 30px;
+    box-shadow: 10px 10px 25px #00000080;
+    width: calc(0.55 * 100vw);
+}
+
+.input_block label {
+    color: rgba(228, 228, 228, 0.8);
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.input_block input[type="text"],input[type="email"],select,textarea {
+    font-size: 20px;
+    display: block;
+    margin: 5px 0px 20px 0px;
+    width: calc(0.53 * 100vw);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.input_block input[type="submit"] {
+    font-size: 20px;
+    background-color: rgba(80, 144, 254, 1);
+    display: block;
+    margin: 30px auto 20px;
+    width: 200px;
+    padding: 8px 20px 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+}
+
+.input_block input[type="submit"]:hover {
+    background-color: rgba(80, 144, 254, 0.8);
+}
+
+.go_to_pay {
+    background-color: #0b132b;
+    padding: 30px 30px 25px 30px;
+    box-shadow: 10px 10px 25px #00000080;
+    width: calc(0.55 * 100vw);
+}
+
+.go_to_pay input {
+    font-size: 20px;
+    display: block;
+    margin: 5px 0px 20px 0px;
+    width: calc(0.53 * 100vw);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.go_to_pay input[type="submit"] {
+    font-size: 20px;
+    background-color: rgba(80, 144, 254, 1);
+    display: block;
+    margin: 30px auto 20px;
+    width: 200px;
+    padding: 8px 20px 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+}
+
+.go_to_pay input[type="submit"]:hover {
+    background-color: rgba(80, 144, 254, 0.8);
+}

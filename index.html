@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+
+                        _oo0oo_
+                       o8888888o
+                       88" . "88
+                       (| -_- |)
+                       0\  =  /0
+                     ___/`---'\___
+                   .' \\|     |// '.
+                  / \\|||  :  |||// \
+                 / _||||| -:- |||||- \
+                |   | \\\  -  /// |   |
+                | \_|  ''\---/''  |_/ |
+                \  .-\__  '-'  ___/-. /
+              ___'. .'  /--.--\  `. .'___
+           ."" '<  `.___\_<|>_/___.' >' "".
+          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+          \  \ `_.   \_ __\ /__ _/   .-` /  /
+      =====`-.____`.___ \_____/___.-`___.-'=====
+                        `=---='
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                佛祖保佑         永無BUG
+    
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            贊助頁面
+        </title>
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+    <body>
+        <div class="form">
+            <div>
+                <form class="input_block" method="post" action="{{url_for('check')}}">
+                    <label>您的遊戲ID</label>
+                    <input type="text" placeholder="Minecraft ID" name="minecraft_id" required pattern="^\w+$">
+                    <label>電子信箱</label>
+                    <input type="email" placeholder="電子信箱" name="email" required>
+                    <label>贊助金額 (新台幣 NTD)</label>
+                    <select required name="amount">
+                        <option>300</option>
+                        <option>600</option>
+                        <option>1200</option>
+                        <option>2400</option>
+                        <option>3250</option>
+                        <option>4200</option>
+                        <option>5000</option>
+                    </select>
+                    <label>留言(選填)</label>
+                    <textarea type="text" placeholder="您想說的話..." name="msg"></textarea>
+                    <div class="g-recaptcha" data-sitekey="6LdSC14hAAAAAC44k7jtnv0hHTPdBOD2l7cpP9Ij"></div>
+                    <p style="color: red">{{error_code}}</p>
+                    <input type="submit" value="前往確認訂單">
+                </form>
+            </div>
+        </div>
+    </body>
+    <script src="js/index.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</html>
