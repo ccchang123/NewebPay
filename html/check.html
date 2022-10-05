@@ -1,29 +1,4 @@
 <!DOCTYPE html>
-<!--
-
-                        _oo0oo_
-                       o8888888o
-                       88" . "88
-                       (| -_- |)
-                       0\  =  /0
-                     ___/`---'\___
-                   .' \\|     |// '.
-                  / \\|||  :  |||// \
-                 / _||||| -:- |||||- \
-                |   | \\\  -  /// |   |
-                | \_|  ''\---/''  |_/ |
-                \  .-\__  '-'  ___/-. /
-              ___'. .'  /--.--\  `. .'___
-           ."" '<  `.___\_<|>_/___.' >' "".
-          | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-          \  \ `_.   \_ __\ /__ _/   .-` /  /
-      =====`-.____`.___ \_____/___.-`___.-'=====
-                        `=---='
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                佛祖保佑         永無BUG
-    
--->
 <html>
     <head>
         <meta charset="UTF-8">
@@ -34,28 +9,25 @@
     </head>
     <body>
         <div class="form">
-            <div>
-                <form class="input_block">
-                    <p style="color: rgba(228, 228, 228, 0.8); font-size: 30px">訂單確認</p>
-                    <label>您的遊戲ID</label>
-                    <input type="text" placeholder="Minecraft ID" name="minecraft_id" required pattern="^\w+$" value="{{minecraft_id}}" readonly>
-                    <label>電子信箱</label>
-                    <input type="email" placeholder="電子信箱" name="email" required value="{{email}}" readonly>
-                    <label>贊助金額 (新台幣 NTD)</label>
-                    <select required name="amount">
-                        <option>{{amount}}</option>
-                    </select>
-                    <label>留言</label>
-                    <textarea type="text" placeholder="{{msg}}" name="msg" readonly></textarea>
-                </form>
-                <form method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway" class="go_to_pay">
-                    <input name="MerchantID" value="{{MerchantID}}" readonly style="display: none;">
-                    <input name="TradeInfo" value="{{Aes_code}}" readonly style="display: none;">
-                    <input name="TradeSha" value="{{Sha_code}}" readonly style="display: none;">
-                    <input name="Version" value="{{version}}" readonly style="display: none;">
-                    <input type="submit" value="繼續前往付款">
-                </form>
-            </div>
+            <form class="input_block">
+                <p style="color: rgba(228, 228, 228, 0.8); font-size: 30px; line-height: 0;">訂單確認</p>
+                <p style="color: rgba(255, 0, 0, 1); font-size: 15px; line-height: 0; margin-bottom: 40px;">請確認訂單內容是否正確</p>
+                <label>您的遊戲ID</label>
+                <input type="text" name="minecraft_id" value="{{minecraft_id}}" readonly>
+                <label>電子信箱</label>
+                <input type="email" name="email" value="{{email}}" readonly>
+                <label>贊助金額 (新台幣 $NTD)</label>
+                <input type="text" name="amount" value="{{amount}}" readonly>
+                <label>留言</label>
+                <textarea type="text" placeholder="{{msg}}" name="msg" readonly></textarea>
+            </form>
+            <form method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway" class="go_to_pay">
+                <input name="MerchantID" value="{{MerchantID}}" readonly>
+                <input name="TradeInfo" value="{{Aes_code}}" readonly>
+                <input name="TradeSha" value="{{Sha_code}}" readonly>
+                <input name="Version" value="{{version}}" readonly>
+                <input type="submit" value="繼續前往付款">
+            </form>
         </div>
     </body>
     <script src="../js/index.js"></script>

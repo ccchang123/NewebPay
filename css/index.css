@@ -8,6 +8,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .input_block {
@@ -35,6 +36,10 @@ body {
     border-radius: 5px;
 }
 
+.input_block textarea {
+    height: 80px;
+}
+
 .input_block input[type="submit"] {
     font-size: 20px;
     background-color: rgba(80, 144, 254, 1);
@@ -59,15 +64,7 @@ body {
 }
 
 .go_to_pay input {
-    font-size: 20px;
-    display: block;
-    margin: 5px 0px 20px 0px;
-    width: calc(0.53 * 100vw);
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    border: none;
-    border-radius: 5px;
+    display: none;
 }
 
 .go_to_pay input[type="submit"] {

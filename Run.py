@@ -1,9 +1,9 @@
 import hashlib
+import json
 import re
-import sys
-import time as TIME
 from datetime import datetime
 from threading import Thread
+from time import sleep
 
 import requests
 from Crypto.Cipher import AES
@@ -16,6 +16,9 @@ FORMAT = '%Y-%m-%d, %H:%M:%S'
 KEY = 'GtP4kEan9gtgMtRhZhXlZWzbKWqVzwHU'
 IV = 'CRE3Cy0Luln13E1P'
 ID = 'MS143865933'
+
+with open('log.json', 'r', encoding = 'utf-8') as f:
+    log = json.load(f)
 
 class Rcon:
     def __init__(self, ip: str, port: int, password: str) -> None:
@@ -31,14 +34,10 @@ class Rcon:
                     print(response)
         except ConnectionRefusedError:
             print('連線失敗')
-            
-""" connect = Rcon('127.0.0.1', 25575, '12345')
-connect.run_command('op cc_chang', 'op cc_chang') """
 
 class MpgTrade:
-    def __init__(self, MerchantID: str, MinecrafeID: str, Email: str, Amount: int, Msg: str, Time: str) -> None:
+    def __init__(self, MerchantID: str, Email: str, Amount: int, Msg: str, Time: str) -> None:
         self.MerchantID = MerchantID
-        self.MinecrafeID = MinecrafeID
         self.Email = Email
         self.Amount = Amount
         self.Msg = Msg
@@ -56,7 +55,7 @@ class MpgTrade:
             'Email': self.Email,
             'OrderComment': self.Msg,
             'ClientBackURL': 'http://ccchang.ddns.net:30003/',
-            'CustomerURL': 'http://127.0.0.1:5001/end_buy',
+            'CustomerURL': 'http://ccchang.ddns.net:30003/end_buy',
             'EmailModify': 0
         }
         Aes_code = ''
@@ -94,6 +93,7 @@ def end_buy():
 
 @app.route('/check', methods=['POST'])
 def check():
+    global log
     auth_data = {
             'secret': '6LdSC14hAAAAAJD8CX7IWrnwETwTMK_Eks46JcKf',
             'response': request.form['g-recaptcha-response']
@@ -108,7 +108,17 @@ def check():
         msg = request.form['msg']
         now_time = str(time())[0:-2]
 
-        Item = MpgTrade(ID, minecraft_id, email, amount, msg, now_time)
+        log[now_time] = {
+            'TimeStamp': now_time,
+            'MinecraftID': minecraft_id,
+            'Amount': amount,
+            'Email': email,
+            'Messenge': msg
+        }
+        with open('log.json', 'w', encoding = 'utf-8') as f:
+            json.dump(log, f, indent = 4)
+
+        Item = MpgTrade(ID, email, amount, msg, now_time)
 
         server = Thread(target=check_pay, args=[now_time, amount])
         server.daemon = True
@@ -131,6 +141,7 @@ def check():
         return render_template('index.html', error_code='驗證失敗')
 
 def check_pay(order_no, amount):
+    global log
     while True:
         value = f'IV={IV}&Amt={amount}&MerchantID={ID}&MerchantOrderNo={order_no}&Key={KEY}'
         value = hashlib.sha256(value.encode('utf-8')).hexdigest().upper()
@@ -150,17 +161,31 @@ def check_pay(order_no, amount):
                     print('未付款')
                 case '1':
                     print('付款成功')
+                    del log[pay_stat['Result']['MerchantOrderNo']]
+                    with open('log.json', 'w', encoding = 'utf-8') as f:
+                        json.dump(log, f, indent = 4)
+                    """ connect = Rcon('127.0.0.1', 25575, '12345')
+                    connect.run_command('op cc_chang', 'op cc_chang') """
                     break
                 case '3':
                     print('取消付款')
                     break
-        TIME.sleep(5)
+        sleep(5)
 
 if __name__ == "__main__":
+    import sys
+
     from gevent import pywsgi
     app.config['DEBUG'] = True
-    server = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
+    WebServer = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
+
+    if log:
+        for i in log:
+            print(i, log[i]['Amount'])
+            server = Thread(target=check_pay, args=[i, log[i]['Amount']])
+            server.daemon = True
+            server.start()
     try:
-        server.serve_forever()
+        WebServer.serve_forever()
     except KeyboardInterrupt:
         sys.exit()
