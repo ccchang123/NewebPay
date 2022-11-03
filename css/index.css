@@ -24,7 +24,7 @@ body {
     font-size: 20px;
 }
 
-.input_block input[type="text"],input[type="email"],select,textarea {
+.input_block input[type="text"],input[type="email"],input[type="number"],textarea {
     font-size: 20px;
     display: block;
     margin: 5px 0px 20px 0px;

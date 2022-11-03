@@ -40,15 +40,7 @@
                 <label>電子信箱</label>
                 <input type="email" placeholder="電子信箱" name="email" required>
                 <label>贊助金額 (新台幣 $NTD)</label>
-                <select required name="amount">
-                    <option>300</option>
-                    <option>600</option>
-                    <option>1200</option>
-                    <option>2400</option>
-                    <option>3250</option>
-                    <option>4200</option>
-                    <option>5000</option>
-                </select>
+                <input type="number" placeholder="贊助金額" name="amount" required min="30">
                 <label>留言(選填)</label>
                 <textarea type="text" placeholder="您想說的話..." name="msg"></textarea>
                 <div class="g-recaptcha" data-sitekey="6LdSC14hAAAAAC44k7jtnv0hHTPdBOD2l7cpP9Ij"></div>

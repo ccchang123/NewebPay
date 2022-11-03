@@ -10,18 +10,30 @@
     <body>
         <div class="form">
             <form class="input_block">
-                <p style="color: rgba(228, 228, 228, 0.8); font-size: 30px; line-height: 0;">訂單確認</p>
-                <p style="color: rgba(255, 0, 0, 1); font-size: 15px; line-height: 0; margin-bottom: 40px;">請確認訂單內容是否正確</p>
+                <p style="color: rgba(228, 228, 228, 0.8); font-size: 30px; line-height: 0;">
+                    訂單確認
+                </p>
+                <p style="color: rgba(255, 0, 0, 1); font-size: 15px; line-height: 0; margin-bottom: 30px;">
+                    請確認訂單內容是否正確
+                </p>
+                <p style="color: rgba(228, 228, 228, 0.8); font-size: 15px; line-height: 0; margin-bottom: 40px;">
+                    交易時間尚餘
+                    <font color="red" id="clock" style="font-size: 30px; position:relative; top:5px; left: 2px;">
+                    60 
+                    </font>
+                    秒
+                </p>
+
                 <label>您的遊戲ID</label>
                 <input type="text" name="minecraft_id" value="{{minecraft_id}}" readonly>
                 <label>電子信箱</label>
                 <input type="email" name="email" value="{{email}}" readonly>
-                <label>贊助金額 (新台幣 $NTD)</label>
+                <label>贊助金額(含手續費30元)</label>
                 <input type="text" name="amount" value="{{amount}}" readonly>
                 <label>留言</label>
                 <textarea type="text" placeholder="{{msg}}" name="msg" readonly></textarea>
             </form>
-            <form method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway" class="go_to_pay">
+            <form method="post" action="https://ccore.newebpay.com/MPG/mpg_gateway" class="go_to_pay" onsubmit="return Check();">
                 <input name="MerchantID" value="{{MerchantID}}" readonly>
                 <input name="TradeInfo" value="{{Aes_code}}" readonly>
                 <input name="TradeSha" value="{{Sha_code}}" readonly>
@@ -31,5 +43,6 @@
         </div>
     </body>
     <script src="../js/index.js"></script>
+    <script src="../js/blur.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </html>
