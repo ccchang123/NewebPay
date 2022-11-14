@@ -7,14 +7,22 @@ from datetime import datetime
 
 import requests
 from Crypto.Cipher import AES
-from flask import Flask, render_template, request
+from flask import Flask, abort, render_template, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from lib.lib import MpgTrade, Rcon
-from Setting import ID, IV, KEY
+from Setting import ID, IV, KEY, SERVER_PORT
 
 app = Flask('', template_folder='', static_folder='')
+limiter = Limiter(app, key_func = get_remote_address, storage_uri='memory://')
 logging.basicConfig(level=logging.DEBUG, filename='log.log', filemode='a', format='%(asctime)s %(levelname)s: %(message)s')
-log = {}
+with open('BanIP.txt', 'r', encoding='utf-8') as file:
+    ban_ip_list = file.read().split('\n')
+    if '' in ban_ip_list:
+        ban_ip_list.remove('')
+with open('log.json', 'r', encoding = 'utf-8') as file:
+    log = json.load(file)
 FORMAT = '%Y-%m-%d, %H:%M:%S'
 
 def time():
@@ -26,7 +34,11 @@ def time():
 def before_request():
     global res
     environ = request.environ
+    ip = environ.get('REMOTE_ADDR')
     res = f"{environ.get('REMOTE_ADDR')} - - \"{environ.get('REQUEST_METHOD')} {environ.get('PATH_INFO')} {environ.get('SERVER_PROTOCOL')}\""
+    if ip in ban_ip_list and environ.get('PATH_INFO') not in ['/css/index.css']:
+        logging.warning(f'{ip} try to connect the server, but was refused. (403)')
+        abort(403)
 
 @app.after_request
 def after_request(response):
@@ -39,28 +51,61 @@ def after_request(response):
             logging.info(f'{res} {status_code}')
     return response
 
+@app.errorhandler(400)
+def Error_400(e):
+    return render_template('html/Error.html', code='400', reason='Bad Request', title='錯誤請求'), 400
+
+@app.errorhandler(403)
+def Error_403(e):
+    return render_template('html/Error.html', code='403', reason='Forbidden', title='拒絕訪問'), 403
+
+@app.errorhandler(404)
+def Error_404(e):
+    return render_template('html/Error.html', code='404', reason='Page Not Found', title='找不到頁面'), 404
+
+@app.errorhandler(429)
+def Error_429(e):
+    return render_template('html/Error.html', code='429', reason='Too Many Requests', title='請求次數過多'), 429
+
+@app.errorhandler(500)
+def Error_500(e):
+    return render_template('html/Error.html', code='500', reason='Internal Server Error', title='伺服器錯誤'), 500
+
 @app.route('/')
 @app.route('/index.html')
+@limiter.limit("10 per 1 minute")
 def main():
     return render_template('index.html')
+    
+@app.route('/terms')
+def terms():
+    return render_template('html/Terms.html')
 
-@app.route('/end_buy', methods=['POST', 'GET'])
+@app.route('/WhySeeThis')
+def WhySeeThis():
+    return render_template('html/WhySeeThis.html')
+
+@app.route('/end_buy', methods=['POST'])
 def end_buy():
-    print(request.form.get('TradeInfo'))
+    global log
     Aes_code = request.form.get('TradeInfo')
     cryptor = AES.new(KEY.encode('utf-8'), AES.MODE_CBC, IV.encode('utf-8'))
     plain_text = str(cryptor.decrypt(a2b_hex(Aes_code)).decode())
     compiler = re.search('}}', plain_text)
     Result = json.loads(plain_text[0:compiler.end()])
-    print(Result['Result']['Amt'])
-    return render_template('html/end_buy.html')
+    search_key = Result['Result']['MerchantOrderNo']
+    print(Result['Result']['Amt'], log[search_key]['MinecraftID'], log[search_key]['UUID'])
+    del log[search_key]
+    with open('log.json', 'w', encoding = 'utf-8') as file:
+        json.dump(log, file, indent = 4)
+    return ''
 
 @app.route('/check', methods=['POST'])
 def check():
     global log
     auth_data = {
-            'secret': '6LdSC14hAAAAAJD8CX7IWrnwETwTMK_Eks46JcKf',
-            'response': request.form['g-recaptcha-response']
+        'secret': '6LdSC14hAAAAAJD8CX7IWrnwETwTMK_Eks46JcKf',
+        'response': request.form['g-recaptcha-response']
     }
     auth_result = requests.post('https://www.google.com/recaptcha/api/siteverify', data=auth_data)
     try:
@@ -84,12 +129,14 @@ def check():
         }
 
         log[now_time] = mpg_info
+        with open('log.json', 'w', encoding = 'utf-8') as file:
+            json.dump(log, file, indent = 4)
 
         logging.info('-'*21 + 'MPG info' + '-'*21)
         logging.info(mpg_info)
         logging.info('-'*50)
 
-        Item = MpgTrade(ID, email, amount, msg, now_time)
+        Item = MpgTrade(email, amount, msg, now_time)
         return render_template(
             'html/check.html',
             minecraft_id = minecraft_id,
@@ -107,11 +154,12 @@ def check():
         return render_template('index.html', error_code='驗證失敗')
 
 if __name__ == "__main__":
+    import ssl
     import sys
 
     from gevent import pywsgi
     app.config['DEBUG'] = True
-    WebServer = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
+    WebServer = pywsgi.WSGIServer(('0.0.0.0', SERVER_PORT), app, keyfile='key.pem', certfile='cert.pem', ssl_version= ssl.PROTOCOL_SSLv23)
     try:
         logging.info('Server STARTED')
         WebServer.serve_forever()

@@ -1,3 +1,5 @@
+{% extends "html/base.html" %}
+{% block main %}
 <!DOCTYPE html>
 <!--
 
@@ -40,15 +42,26 @@
                 <label>電子信箱</label>
                 <input type="email" placeholder="電子信箱" name="email" required>
                 <label>贊助金額 (新台幣 $NTD)</label>
-                <input type="number" placeholder="贊助金額" name="amount" required min="30">
+                <input type="number" placeholder="贊助金額" name="amount" required min="30" value="30" oninput="input_num()">
+                <p style="color: rgba(228, 228, 228, 0.8); font-size: 15px; line-height: 0px; margin-bottom: 30px; margin-top: -5px;">
+                    實際應付:
+                    <font color="red" id="num" style="font-size: 25px; position:relative; top:5px; left: 2px;">
+                    60
+                    </font>
+                    元(含手續費30元)
+                </p>
                 <label>留言(選填)</label>
                 <textarea type="text" placeholder="您想說的話..." name="msg"></textarea>
                 <div class="g-recaptcha" data-sitekey="6LdSC14hAAAAAC44k7jtnv0hHTPdBOD2l7cpP9Ij"></div>
                 <p style="color: red">{{error_code}}</p>
-                <input type="submit" value="前往確認訂單">
+                <div id="input_div">
+                    <input type="reset" value="清除" onclick="document.getElementById('num').innerText = `60 `">
+                    <input type="submit" value="前往確認訂單">
+                </div>
             </form>
         </div>
     </body>
     <script src="js/index.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </html>
+{% endblock %}

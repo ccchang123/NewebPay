@@ -4,26 +4,26 @@ import re
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from rcon.source import Client
-from Setting import IV, KEY
 
-class Rcon:
-    def __init__(self, ip: str, port: int, password: str) -> None:
-        self.ip = ip
-        self.port = port
-        self.password = password
+from Setting import ID, IP, IV, KEY, PASSWORD, RCON_PORT
 
-    def run_command(self, *command: str) -> None:
+class Rcon():
+    def __init__(self) -> None:
+        self.__ip = IP
+        self.__port = RCON_PORT
+        self.__password = PASSWORD
+
+    def run_command(self, *command: str) -> str:
         try:
-            with Client(self.ip, self.port, passwd = self.password) as client:
+            with Client(self.__ip, self.__port, passwd = self.__password) as client:
                 for cmd in command:
-                    response = client.run(cmd)
-                    print(response)
+                    yield client.run(cmd)
         except ConnectionRefusedError:
-            print('連線失敗')
+            yield '連線失敗'
 
 class MpgTrade:
-    def __init__(self, MerchantID: str, Email: str, Amount: int, Msg: str, Time: str) -> None:
-        self.MerchantID = MerchantID
+    def __init__(self, Email: str, Amount: int, Msg: str, Time: str) -> None:
+        self.MerchantID = ID
         self.Email = Email
         self.Amount = Amount
         self.Msg = Msg
@@ -40,10 +40,11 @@ class MpgTrade:
             'ItemDesc': '伺服器贊助',
             'Email': self.Email,
             'OrderComment': self.Msg,
-            'ClientBackURL': 'http://ccchang.ddns.net:30003/',
-            'CustomerURL': 'http://ccchang.ddns.net:30003/end_buy',
+            'ClientBackURL': 'https://203.204.89.217',
+            'NotifyURL': 'https://203.204.89.217/end_buy',
             'EmailModify': 0,
-            'TradeLimit': 180
+            'TradeLimit': 180,
+            'CREDIT': 0
         }
         Aes_code = ''
         for i in TradeInfo:

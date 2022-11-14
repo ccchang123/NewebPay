@@ -1,0 +1,32 @@
+{% extends "html/base.html" %}
+{% block main %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {{title}}
+        </title>
+        <link rel="stylesheet" href="../css/index.css">
+    </head>
+    <body>
+        <div style="
+                color:rgba(228, 228, 228, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content:
+                center;
+                height: 100vh;">
+            <div>
+                <p style="font-size: 60px">Error {{code}}</p>
+                <p style="font-size: 60px; margin-bottom: 0px;">{{reason}}</p>
+                <p style="font-size: 10px">
+                    <a href="{{url_for('WhySeeThis')}}" style="color:rgba(228, 228, 228, 0.7)">
+                        為什麼會看到這個?
+                    </a>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
+{% endblock %}

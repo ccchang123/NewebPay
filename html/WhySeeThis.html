@@ -1,0 +1,66 @@
+{% extends "html/base.html" %}
+{% block main %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            錯誤代碼解釋
+        </title>
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/terms.css">
+    </head>
+    <body>
+        <div style="color:rgba(228, 228, 228, 0.7); display: flex; align-items: center; justify-content: center;height: 100vh; font-size: 56px;">
+            <div>
+                <p style="font-family:Long Cang">贊助系統</p>
+                <p>錯誤代碼解釋</p>
+            </div>
+        </div>
+        <div id="one">
+            <div style="background-color: rgba(228, 228, 228, 0.5); padding: 50px 0px 50px 0px; width: 100vw;">
+                <h2>
+                    錯誤代碼 400 - Bad Request
+                </h2>
+                <p>
+                    由於明顯的客戶端錯誤(例如，格式錯誤的請求語法，太大的大小，無效的請求訊息或欺騙性路由請求)，伺服器不能或不會處理該請求。
+                </p>
+                <h2>
+                    錯誤代碼 403 - Forbidden
+                </h2>
+                <p>
+                    伺服器已經理解請求，但是拒絕執行它。有可能您被該伺服器封鎖拒絕存取了。
+                    <br>
+                    <br>
+                    <i>您可以: 嘗試聯絡伺服器管理員。</i>
+                </p>
+                <h2>
+                    錯誤代碼 404 - Page Not Found
+                </h2>
+                <p>
+                    請求失敗，請求所希望得到的資源未被在伺服器上發現，但允許使用者的後續請求。
+                    <br>
+                    <br>
+                    <i>您可以: 嘗試輸入正確的網址。</i>
+                </p>
+                <h2>
+                    錯誤代碼 429 - Too Many Requests
+                </h2>
+                <p>
+                    您在給定的時間內傳送了太多的請求。請稍等片刻後再傳送請求。
+                </p>
+                <h2>
+                    錯誤代碼 500 - Internal Server Error
+                </h2>
+                <p>
+                    伺服器遇到了一個未曾預料的狀況，導致了它無法完成對請求的處理。
+                    <br>
+                    <br>
+                    <i>您可以: 稍後片刻再試一次，或嘗試聯絡伺服器管理員。</i>
+                </p>
+            </div>
+        </div>
+    </body>
+    <script src="../js/index.js"></script>
+</html>
+{% endblock %}

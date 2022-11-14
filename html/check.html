@@ -1,3 +1,5 @@
+{% extends "html/base.html" %}
+{% block main %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +21,7 @@
                 <p style="color: rgba(228, 228, 228, 0.8); font-size: 15px; line-height: 0; margin-bottom: 40px;">
                     交易時間尚餘
                     <font color="red" id="clock" style="font-size: 30px; position:relative; top:5px; left: 2px;">
-                    60 
+                        60 
                     </font>
                     秒
                 </p>
@@ -46,3 +48,4 @@
     <script src="../js/blur.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </html>
+{% endblock %}

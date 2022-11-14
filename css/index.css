@@ -1,5 +1,5 @@
 body {
-    background-color: #e76f51;
+    background-color: rgba(11, 19, 43, 1);
     margin: 0;
 }
 
@@ -12,9 +12,9 @@ body {
 }
 
 .input_block {
-    background-color: #0b132b;
+    background-color: rgba(31, 40, 61, 0.4);
     padding: 30px 30px 25px 30px;
-    box-shadow: 10px 10px 25px #00000080;
+    box-shadow: 10px 0px 25px #00000080;
     width: calc(0.55 * 100vw);
 }
 
@@ -32,32 +32,61 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 10px;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid rgba(198, 198, 198, 0.5);
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color:rgba(228, 228, 228, 0.8);
+    outline: none;
 }
 
 .input_block textarea {
     height: 80px;
 }
 
+.input_block input:focus,textarea:focus {
+    outline: 1px solid rgba(66, 163, 223, 0.8);
+}
+
+#input_div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .input_block input[type="submit"] {
     font-size: 20px;
     background-color: rgba(80, 144, 254, 1);
     display: block;
-    margin: 30px auto 20px;
-    width: 200px;
+    margin: 30px 100px 20px 50px;  
     padding: 8px 20px 8px 20px;
     cursor: pointer;
     border-radius: 20px;
     border: none;
+    flex: 1;
 }
 
 .input_block input[type="submit"]:hover {
     background-color: rgba(80, 144, 254, 0.8);
 }
 
+.input_block input[type="reset"] {
+    font-size: 20px;
+    background-color: rgba(213, 225, 247, 1);
+    display: block;
+    margin: 30px 50px 20px 100px;
+    padding: 8px 20px 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    border: none;
+    flex: 1;
+}
+
+.input_block input[type="reset"]:hover {
+    background-color: rgba(213, 225, 247, 0.8);
+}
+
 .go_to_pay {
-    background-color: #0b132b;
+    background-color: rgba(31, 40, 61, 0.4);
     padding: 30px 30px 25px 30px;
     box-shadow: 10px 10px 25px #00000080;
     width: calc(0.55 * 100vw);
@@ -81,4 +110,41 @@ body {
 
 .go_to_pay input[type="submit"]:hover {
     background-color: rgba(80, 144, 254, 0.8);
+}
+
+#copyright {
+    padding: 32px;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: #1d242a;
+    text-align: center;
+    font-size: 11px;
+    font-family: Arial;
+    position: relative;
+}
+
+#copyright div a {
+    text-decoration: none;
+}
+
+#copyright div a img {
+    width: 20px;
+    padding: 20px;
+    transition: 0.5s;
+}
+
+#copyright div a img:hover {
+    width: 30px;
+    transition: 0.3s;
+}
+
+#copyright .copyright_link {
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+#copyright .copyright_link:hover {
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 5px;
+    text-decoration: underline;
 }
