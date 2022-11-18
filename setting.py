@@ -1,3 +1,0 @@
-KEY = 'GtP4kEan9gtgMtRhZhXlZWzbKWqVzwHU'
-IV = 'CRE3Cy0Luln13E1P'
-ID = 'MS143865933'
