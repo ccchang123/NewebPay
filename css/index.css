@@ -39,12 +39,69 @@ body {
     outline: none;
 }
 
+.input_block input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 20px;
+}
+
 .input_block textarea {
     height: 80px;
 }
 
 .input_block input:focus,textarea:focus {
     outline: 1px solid rgba(66, 163, 223, 0.8);
+}
+
+@keyframes show_notice {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#notice {
+    font-size: 20px;
+    color: rgba(255, 0, 0);
+    text-decoration: underline;
+}
+
+#notice:hover {
+    color: rgba(255, 0, 0, 0.8);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.notice {
+    animation: show_notice 1.5s;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(228, 228, 228, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.notice div {
+    background-color: rgba(228, 228, 228, 0.8);
+    border: 2px solid black;
+    border-radius: 20px;
+    position: fixed;
+    width: 75vw;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.notice div li {
+    letter-spacing: 3px;
+    margin-bottom: 10px;
 }
 
 #input_div {

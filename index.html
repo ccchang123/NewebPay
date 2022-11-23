@@ -35,6 +35,22 @@
         <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
+        <div class="notice" onclick="unshow_notice()">
+            <div>
+                <ol>
+                    <li>
+                        伺服器贊助除特殊情況外一律不設立退款！
+                    </li>
+                    <li>
+                        請注意此為支持伺服器而贊助無償給予伺服器經營支持，並非其購買，伺服器VIP僅為贊助後回饋而非商品。
+                    </li>
+                    <li>
+                        本網站及系統僅作為輔助之使用，不負一切法律責任。
+                    </li>
+                </ol>
+                <p style="margin-top: 50px;">點擊任意處以繼續</p>
+            </div>
+        </div>
         <div class="form">
             <form class="input_block" method="post" action="{{url_for('check')}}">
                 <label>您的遊戲ID</label>
@@ -45,13 +61,19 @@
                 <input type="number" placeholder="贊助金額" name="amount" required min="30" value="30" oninput="input_num()">
                 <p style="color: rgba(228, 228, 228, 0.8); font-size: 15px; line-height: 0px; margin-bottom: 30px; margin-top: -5px;">
                     實際應付:
-                    <font color="red" id="num" style="font-size: 25px; position:relative; top:5px; left: 2px;">
+                    <font color="red" id="num" style="font-size: 25px;  top:5px; left: 2px;">
                     60
                     </font>
                     元(含手續費30元)
                 </p>
                 <label>留言(選填)</label>
                 <textarea type="text" placeholder="您想說的話..." name="msg"></textarea>
+                <input type="checkbox" name="agree_notice" required value="agree">
+                <label>我已詳細閱讀且同意
+                    <font id="notice" onclick="show_notice()">
+                        注意事項
+                    </font>
+                </label>
                 <div class="g-recaptcha" data-sitekey="6LdSC14hAAAAAC44k7jtnv0hHTPdBOD2l7cpP9Ij"></div>
                 <p style="color: red">{{error_code}}</p>
                 <div id="input_div">

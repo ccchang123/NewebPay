@@ -12,17 +12,21 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 from lib.lib import MpgTrade, Rcon
-from Setting import ID, IV, KEY, SERVER_PORT
+from Setting import *
 
 app = Flask('', template_folder='', static_folder='')
 limiter = Limiter(app, key_func = get_remote_address, storage_uri='memory://')
 logging.basicConfig(level=logging.DEBUG, filename='log.log', filemode='a', format='%(asctime)s %(levelname)s: %(message)s')
 with open('BanIP.txt', 'r', encoding='utf-8') as file:
     ban_ip_list = file.read().split('\n')
-    if '' in ban_ip_list:
-        ban_ip_list.remove('')
+    while True:
+        if '' in ban_ip_list:
+            ban_ip_list.remove('')
+        else:
+            break
 with open('log.json', 'r', encoding = 'utf-8') as file:
     log = json.load(file)
+limiter_times = {}
 FORMAT = '%Y-%m-%d, %H:%M:%S'
 
 def time():
@@ -36,16 +40,31 @@ def before_request():
     environ = request.environ
     ip = environ.get('REMOTE_ADDR')
     res = f"{environ.get('REMOTE_ADDR')} - - \"{environ.get('REQUEST_METHOD')} {environ.get('PATH_INFO')} {environ.get('SERVER_PROTOCOL')}\""
-    if ip in ban_ip_list and environ.get('PATH_INFO') not in ['/css/index.css']:
-        logging.warning(f'{ip} try to connect the server, but was refused. (403)')
+    if (BLACKLIST_MODE) and (ip in ban_ip_list) and (environ.get('PATH_INFO') not in ['/css/index.css']):
+        logging.warning(f'{ip} try to connect the server, but was refused. (blacklist mode)')
+        abort(403)   
+    if (WHITELIST_MODE) and (ip not in ban_ip_list) and (environ.get('PATH_INFO') not in ['/css/index.css']):
+        logging.warning(f'{ip} try to connect the server, but was refused. (whitelist mode)')
         abort(403)
 
 @app.after_request
 def after_request(response):
+    ip = request.environ.get('REMOTE_ADDR')
     match str(status_code := response.status_code)[0]:
         case '5':
             logging.error(f'{res} {status_code}')
         case '4':
+            if status_code == 429:
+                try:
+                    limiter_times[ip] = limiter_times[ip] + 1
+                except:
+                    limiter_times[ip] = 1
+                if limiter_times[ip] > 5:
+                    logging.warning(f'AutoBan: {ip} too many requests. (429)')
+                    ban_ip_list.append(ip)
+                    with open('BanIP.txt', 'w', encoding='utf-8') as file:
+                        for i in ban_ip_list:
+                            file.write(f'{i}\n')
             logging.warning(f'{res} {status_code}')
         case _:
             logging.info(f'{res} {status_code}')
@@ -94,7 +113,8 @@ def end_buy():
     compiler = re.search('}}', plain_text)
     Result = json.loads(plain_text[0:compiler.end()])
     search_key = Result['Result']['MerchantOrderNo']
-    print(Result['Result']['Amt'], log[search_key]['MinecraftID'], log[search_key]['UUID'])
+    rcon = Rcon()
+    print(rcon.run_command(f'bungeedonate {log[search_key]["UUID"]} {Result["Result"]["Amt"] - 30}'))
     del log[search_key]
     with open('log.json', 'w', encoding = 'utf-8') as file:
         json.dump(log, file, indent = 4)
@@ -113,6 +133,7 @@ def check():
     except:
         uuid = None
     if auth_result.json()['success'] and uuid:
+        uuid = f'{uuid[0:8]}-{uuid[8:12]}-{uuid[12:16]}-{uuid[16:20]}-{uuid[20:]}'
         minecraft_id = request.form['minecraft_id']
         email = request.form['email']
         amount = int(request.form['amount']) + 30
@@ -159,7 +180,7 @@ if __name__ == "__main__":
 
     from gevent import pywsgi
     app.config['DEBUG'] = True
-    WebServer = pywsgi.WSGIServer(('0.0.0.0', SERVER_PORT), app, keyfile='key.pem', certfile='cert.pem', ssl_version= ssl.PROTOCOL_SSLv23)
+    WebServer = pywsgi.WSGIServer(('0.0.0.0', SERVER_PORT), app) #, keyfile='key.pem', certfile='cert.pem', ssl_version= ssl.PROTOCOL_SSLv23)
     try:
         logging.info('Server STARTED')
         WebServer.serve_forever()

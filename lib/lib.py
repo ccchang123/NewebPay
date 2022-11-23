@@ -1,11 +1,12 @@
 import hashlib
+import logging
 import re
 
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from rcon.source import Client
 
-from Setting import ID, IP, IV, KEY, PASSWORD, RCON_PORT
+from Setting import *
 
 class Rcon():
     def __init__(self) -> None:
@@ -13,13 +14,14 @@ class Rcon():
         self.__port = RCON_PORT
         self.__password = PASSWORD
 
-    def run_command(self, *command: str) -> str:
+    def run_command(self, command: str) -> str:
         try:
             with Client(self.__ip, self.__port, passwd = self.__password) as client:
-                for cmd in command:
-                    yield client.run(cmd)
+                logging.info(f'Run command: {command}')
+                return client.run(command)
         except ConnectionRefusedError:
-            yield '連線失敗'
+            logging.warning(f'Fail to run command: {command}')
+            return '連線失敗'
 
 class MpgTrade:
     def __init__(self, Email: str, Amount: int, Msg: str, Time: str) -> None:
@@ -40,8 +42,8 @@ class MpgTrade:
             'ItemDesc': '伺服器贊助',
             'Email': self.Email,
             'OrderComment': self.Msg,
-            'ClientBackURL': 'https://203.204.89.217',
-            'NotifyURL': 'https://203.204.89.217/end_buy',
+            'ClientBackURL': 'https://pay.cocobeen.net',
+            'NotifyURL': 'http://203.204.89.217/end_buy',
             'EmailModify': 0,
             'TradeLimit': 180,
             'CREDIT': 0
