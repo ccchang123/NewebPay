@@ -180,7 +180,8 @@ if __name__ == "__main__":
 
     from gevent import pywsgi
     app.config['DEBUG'] = True
-    WebServer = pywsgi.WSGIServer(('0.0.0.0', SERVER_PORT), app) #, keyfile='key.pem', certfile='cert.pem', ssl_version= ssl.PROTOCOL_SSLv23)
+    WebServer = pywsgi.WSGIServer(('0.0.0.0', SERVER_PORT), app) 
+    # , keyfile='key.pem', certfile='cert.pem', ssl_version= ssl.PROTOCOL_SSLv23)
     try:
         logging.info('Server STARTED')
         WebServer.serve_forever()
