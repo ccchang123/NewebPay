@@ -46,7 +46,6 @@ class MpgTrade:
             'NotifyURL': 'http://203.204.89.217/end_buy',
             'EmailModify': 0,
             'TradeLimit': 180,
-            'CREDIT': 0
         }
         Aes_code = ''
         for i in TradeInfo:
